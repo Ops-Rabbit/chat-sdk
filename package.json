@@ -1,6 +1,6 @@
 {
   "name": "@opsrabbit/chat",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "TypeScript SDK and framework-neutral web component for integrating OpsRabbit chat.",
   "license": "Apache-2.0",
   "type": "module",
@@ -31,7 +31,9 @@
     },
     "./react-native": {
       "types": "./dist/react-native.d.ts",
-      "import": "./dist/react-native.js"
+      "react-native": "./dist/react-native.js",
+      "import": "./dist/react-native.js",
+      "default": "./dist/react-native.js"
     },
     "./testing": {
       "types": "./dist/testing.d.ts",
