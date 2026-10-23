@@ -6,7 +6,9 @@ import { join } from "node:path";
 const temporaryDirectory = mkdtempSync(join(tmpdir(), "opsrabbit-chat-pack-"));
 try {
   const output = execFileSync("npm", ["pack", "--json", "--ignore-scripts", "--pack-destination", temporaryDirectory], { encoding: "utf8" });
-  const [result] = JSON.parse(output);
+  // npm 10/11 print an array of results; npm 12 prints an object keyed by package name.
+  const packed = JSON.parse(output);
+  const [result] = Array.isArray(packed) ? packed : Object.values(packed);
   if (!result?.filename || !Array.isArray(result.files)) throw new Error("npm pack returned no package inventory.");
   const paths = new Set(result.files.map((file) => file.path));
   for (const required of ["package.json", "README.md", "LICENSE", "NOTICE", "dist/index.js", "dist/index.d.ts", "dist/widget.js", "dist/widget.d.ts", "dist/testing.js", "dist/testing.d.ts"]) {
