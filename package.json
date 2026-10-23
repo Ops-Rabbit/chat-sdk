@@ -5,6 +5,7 @@
   "license": "Apache-2.0",
   "type": "module",
   "sideEffects": ["./dist/widget.js"],
+  "packageManager": "npm@12.2.1",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -53,13 +54,13 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^24.10.0",
-    "@vitest/coverage-v8": "^4.1.10",
-    "eslint": "^10.0.1",
-    "happy-dom": "^20.8.3",
+    "@types/node": "^24.19.2",
+    "@vitest/coverage-v8": "^5.0.5",
+    "eslint": "^10.13.0",
+    "happy-dom": "^21.0.4",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.64.0",
-    "vitest": "^4.1.10"
+    "typescript-eslint": "^8.72.0",
+    "vitest": "^5.0.5"
   },
   "publishConfig": {
     "access": "public",

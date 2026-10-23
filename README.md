@@ -16,7 +16,7 @@ npm install @opsrabbit/chat
 
 Before creating a client, an OpsRabbit administrator and the customer backend owner must configure an Embedded Chat preset and its RSA signing keys. Follow the [end-to-end setup guide](docs/setup.md); the private key stays only in the customer backend, while OpsRabbit stores only the public key.
 
-The initial release is ESM-only and targets modern browsers. Node.js 20 or newer is supported for server-rendering and tests through its standards-compatible Fetch and Web Streams APIs. Repository development and publication use the version pinned in `.nvmrc`.
+The initial release is ESM-only and targets modern browsers. Node.js 20 or newer is supported for server-rendering and tests through its standards-compatible Fetch and Web Streams APIs. When running the SDK on Node.js, use a currently supported release line with the latest security patches, because Node's `fetch` provides the TLS and response-decompression handling for OpsRabbit traffic. Repository development and publication use the version pinned in `.nvmrc`.
 
 ## React Native
 

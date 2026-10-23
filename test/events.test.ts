@@ -12,6 +12,13 @@ function stream(...chunks: string[]) {
   });
 }
 
+async function drain(events: AsyncIterable<unknown>) {
+  const iterator = events[Symbol.asyncIterator]();
+  while (!(await iterator.next()).done) {
+    // Consume every event so stream errors surface.
+  }
+}
+
 function byteStream(...chunks: Uint8Array[]) {
   return new ReadableStream<Uint8Array>({
     start(controller) {
@@ -73,21 +80,13 @@ describe("parseEventStream", () => {
   });
 
   it("rejects invalid JSON, incomplete events, and oversized data", async () => {
-    await expect(async () => {
-      for await (const _event of parseEventStream(stream("data: nope\n\n"))) void _event;
-    }).rejects.toBeInstanceOf(ChatProtocolError);
-    await expect(async () => {
-      for await (const _event of parseEventStream(stream("data: {}"))) void _event;
-    }).rejects.toThrow("incomplete event");
-    await expect(async () => {
-      for await (const _event of parseEventStream(stream(`data: ${"x".repeat(2000)}\n\n`), { maxEventBytes: 1024, maxBufferBytes: 2048 })) void _event;
-    }).rejects.toThrow("event exceeded");
+    await expect(drain(parseEventStream(stream("data: nope\n\n")))).rejects.toBeInstanceOf(ChatProtocolError);
+    await expect(drain(parseEventStream(stream("data: {}")))).rejects.toThrow("incomplete event");
+    await expect(drain(parseEventStream(stream(`data: ${"x".repeat(2000)}\n\n`), { maxEventBytes: 1024, maxBufferBytes: 2048 }))).rejects.toThrow("event exceeded");
   });
 
   it("validates configured stream bounds", async () => {
-    await expect(async () => {
-      for await (const _event of parseEventStream(stream(""), { maxEventBytes: 10 })) void _event;
-    }).rejects.toBeInstanceOf(ChatConfigurationError);
+    await expect(drain(parseEventStream(stream(""), { maxEventBytes: 10 }))).rejects.toBeInstanceOf(ChatConfigurationError);
   });
 
   it("preserves CRLF and UTF-8 characters split across network chunks", async () => {
